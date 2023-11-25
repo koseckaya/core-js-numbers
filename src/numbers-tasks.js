@@ -276,7 +276,7 @@ function getFibonacciNumber(index) {
   if (index === 1) return 1;
   let prevPrev = 0;
   let prev = 1;
-  for (let i = 2; i <= index; i + 1) {
+  for (let i = 2; i <= index; i += 1) {
     const current = prevPrev + prev;
     prevPrev = prev;
     prev = current;
@@ -297,7 +297,7 @@ function getFibonacciNumber(index) {
  */
 function getSumToN(n) {
   let sum = 0;
-  for (let item = 0; item <= n; item + 1) {
+  for (let item = 0; item <= n; item += 1) {
     sum += item;
   }
   return sum;
@@ -318,6 +318,7 @@ function getSumOfDigits(num) {
   return num
     .toString()
     .split('')
+    .map((i) => Number(i))
     .reduce((a, b) => {
       return a + b;
     }, 0);
@@ -441,8 +442,8 @@ function getNumberValue(number) {
  * 5        => true
  * '5'      => false
  */
-function isNumber(/* number */) {
-  throw new Error('Not implemented');
+function isNumber(number) {
+  return typeof number === 'number' && Number.isFinite(number);
 }
 
 /**
@@ -457,7 +458,7 @@ function isNumber(/* number */) {
  * '5'  => false
  */
 function isInteger(number) {
-  return typeof number === 'number';
+  return typeof number === 'number' && Number.isInteger(number);
 }
 
 /**
@@ -471,7 +472,11 @@ function isInteger(number) {
  * 'abcdefgh'      => NaN
  */
 function getFloatOnString(str) {
-  return parseFloat(str);
+  const res = Number.parseFloat(str);
+  if (res.isNaN) {
+    return NaN;
+  }
+  return res;
 }
 
 /**
@@ -489,7 +494,11 @@ function getFloatOnString(str) {
  * '10', 8              => 8
  */
 function getIntegerOnString(str, base) {
-  return parseFloat(str, base);
+  const res = Number.parseInt(str, base);
+  if (res.isNaN) {
+    return NaN;
+  }
+  return res;
 }
 
 /**
@@ -504,7 +513,7 @@ function getIntegerOnString(str, base) {
  * 2 ** 53  => false
  */
 function isSafeInteger(number) {
-  return isSafeInteger(number);
+  return Number.isSafeInteger(number);
 }
 
 /**
@@ -518,7 +527,7 @@ function isSafeInteger(number) {
  * -5.1 => -6
  */
 function roundToSmallestInteger(number) {
-  return Math.ceil(number);
+  return Math.floor(number);
 }
 
 /**
@@ -532,7 +541,7 @@ function roundToSmallestInteger(number) {
  * -5.9 => -5
  */
 function roundToLargestInteger(number) {
-  return Math.floor(number);
+  return Math.ceil(number);
 }
 
 /**
@@ -610,7 +619,7 @@ function getMaxNumber(firstNumber, secondNumber) {
  * -1, 1 => -1 | 0 | 1
  */
 function getRandomInteger(min, max) {
-  return Math.random() * (max - min) + min;
+  return Math.floor(Math.random() * (max - min) + min);
 }
 
 /**
@@ -642,7 +651,8 @@ function getHypotenuse(a, b) {
  */
 function getCountOfOddNumbers(number) {
   let count = 0;
-  for (let i; i <= number; i + 1) {
+  const num = Math.abs(number);
+  for (let i = 0; i <= num; i += 1) {
     if (i % 2 !== 0) {
       count += 1;
     }
